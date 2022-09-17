@@ -1,5 +1,5 @@
 import { useReducer, useState } from 'react';
-import { Button, TextInput, Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Button, TextInput, Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
@@ -7,6 +7,8 @@ import { Feather } from '@expo/vector-icons';
 import MoviesReminder from "./componentes/MoviesReminder";
 import QuotesReminder from "./componentes/QuotesReminder";
 import SongsReminder from "./componentes/MoviesReminder";
+
+import StyledLink from "./componentes/StyledLink";
 
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 
@@ -24,14 +26,16 @@ const Main = () => {
 const TopBar = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   return(
-    <View style={ {
-      marginTop: Constants.statusBarHeight, 
-      width: '100%',
-      height: 60, 
-      backgroundColor: 'rgb(34, 211, 238)'} }>
-      <TouchableHighlight onPress={() => setIsMenuVisible(!isMenuVisible)}>
-        <Feather name="menu" size={45} color="rgb(34, 121, 100)" style={{marginTop: 7, marginLeft: 7}} />
-      </TouchableHighlight>
+    <View>
+      <View style={ {
+        marginTop: Constants.statusBarHeight,
+        width: '100%',
+        height: 60,
+        backgroundColor: 'rgb(34, 211, 238)'} }>
+        <TouchableHighlight onPress={() => setIsMenuVisible(!isMenuVisible)}>
+          <Feather name="menu" size={45} color="rgb(34, 121, 100)" style={{marginTop: 7, marginLeft: 7}} />
+        </TouchableHighlight>
+      </View>
       {isMenuVisible && <SideMenu />}
     </View>
   );
@@ -40,9 +44,16 @@ const TopBar = () => {
 const SideMenu = () => {
   return(
     <View style={ {
+    position: 'absolute',
+    top: Constants.statusBarHeight + 60,
     padding: 15,
     width: '50%',
+    height: Dimensions.get('window').height - 60,
     backgroundColor: 'rgb(34, 211, 238)'} }>
+
+      <StyledLink to="reminder/movies">
+        <Text>Películas   </Text>
+      </StyledLink>
 
       <Link to="reminder/movies">
         <Text>Películas</Text>
