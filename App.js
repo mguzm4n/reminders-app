@@ -4,32 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
 
+import MoviesReminder from "./componentes/MoviesReminder";
+import QuotesReminder from "./componentes/QuotesReminder";
+import SongsReminder from "./componentes/MoviesReminder";
+
+import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+
 import { addItemTo } from './utils';
-const MovieForm = () => {
-  const [movieForm, setMovieForm] = useState({});
 
-  const addNewItem = async () => {
-    try {
-      await addItemTo('movies', movieForm);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onInputTextChange = (name, txt) => {
-    setMovieForm({...movieForm, [name]: txt});
-  };
-
-  return(<View style={{width: '80%'}}>
-    <Text style={{textAlign: 'left'}}>Nombre de la película</Text>
-    <TextInput onChangeText={txt => onInputTextChange('name', txt)} placeholder="Movie-name" />
-
-    <Text style={{textAlign: 'left'}}>Imagen para la película</Text>
-    <TextInput onChangeText={txt => onInputTextChange('img', txt)} placeholder="Movie-img" />
-
-    <Button onPress={addNewItem} title="Añadir" />
-  </View>);
-};
 
 const Main = () => {
   return(<>
@@ -40,38 +22,59 @@ const Main = () => {
 };
 
 const TopBar = () => {
-  return(<View style={ {
-    marginTop: Constants.statusBarHeight, 
-    width: '100%',
-    height: 60, 
-    backgroundColor: 'rgb(34, 211, 238)'} }>
-    <TouchableHighlight>
-      <Feather name="menu" size={45} color="rgb(34, 121, 100)" style={{marginTop: 7, marginLeft: 7}} />
-    </TouchableHighlight>
-  </View>);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  return(
+    <View style={ {
+      marginTop: Constants.statusBarHeight, 
+      width: '100%',
+      height: 60, 
+      backgroundColor: 'rgb(34, 211, 238)'} }>
+      <TouchableHighlight onPress={() => setIsMenuVisible(!isMenuVisible)}>
+        <Feather name="menu" size={45} color="rgb(34, 121, 100)" style={{marginTop: 7, marginLeft: 7}} />
+      </TouchableHighlight>
+      {isMenuVisible && <SideMenu />}
+    </View>
+  );
 };
 
 const SideMenu = () => {
-  return(<View style={ {
-    position: "absolute",
-    top: Constants.statusBarHeight + 60,
+  return(
+    <View style={ {
     padding: 15,
     width: '50%',
-    zIndex: 2,
     backgroundColor: 'rgb(34, 211, 238)'} }>
-      <Text>Películas</Text>
-      <Text>Quotes</Text>
-      <Text>Música</Text>
-  </View>);
+
+      <Link to="reminder/movies">
+        <Text>Películas</Text>
+      </Link>
+
+      <Link to="reminder/quotes">
+        <Text>Quotes</Text>
+      </Link>
+
+      <Link to="reminder/songs">
+        <Text>Música</Text>
+      </Link>
+
+    </View>
+  );
 };
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <TopBar />
-      <SideMenu />
-      <Main />
-    </View>
+    <NativeRouter>
+      <View style={styles.container}>
+        <TopBar />
+        <View style={ {zIndex: -1} }>
+          <Routes>
+            <Route path='/' element={<View><Text>Home</Text></View>} />
+            <Route path='reminder/quotes' element={<QuotesReminder />} />
+            <Route path='reminder/movies' element={<MoviesReminder />} />
+            <Route path='reminder/songs' element={<SongsReminder />} />
+          </Routes>
+        </View>
+      </View>
+    </NativeRouter>
   );
 }
 

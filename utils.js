@@ -1,5 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+export const getDataFrom = async (category) => {
+  try {
+    const strCategoryArray = await AsyncStorage.getItem(category);
+    if(strCategoryArray != null){
+      return JSON.parse(strCategoryArray);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  return [];
+};
+
 const addItemToArray = async (category, categoryArray, item) => {
   categoryArray.push(item);
   try {
