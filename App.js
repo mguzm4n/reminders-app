@@ -1,6 +1,5 @@
 import { useReducer, useState } from 'react';
 import { Dimensions, Button, TextInput, Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
 
@@ -12,19 +11,13 @@ import StyledLink from "./componentes/StyledLink";
 
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 
-import { addItemTo } from './utils';
-
-
-const Main = () => {
-  return(<>
-    <Text>Añadir nuevo recordatorio de película</Text>
-
-    <MovieForm />
-  </>);
-};
+import PendingList from './componentes/PendingList';
 
 const TopBar = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  const setMenuVisibility = () => setIsMenuVisible(!isMenuVisible);
+
   return(
     <View>
       <View style={ {
@@ -32,16 +25,16 @@ const TopBar = () => {
         width: '100%',
         height: 60,
         backgroundColor: 'rgb(34, 211, 238)'} }>
-        <TouchableHighlight onPress={() => setIsMenuVisible(!isMenuVisible)}>
+        <TouchableHighlight onPress={setMenuVisibility}>
           <Feather name="menu" size={45} color="rgb(34, 121, 100)" style={{marginTop: 7, marginLeft: 7}} />
         </TouchableHighlight>
       </View>
-      {isMenuVisible && <SideMenu />}
+      {isMenuVisible && <SideMenu setMenuVisibilityFn={setMenuVisibility} />}
     </View>
   );
 };
 
-const SideMenu = () => {
+const SideMenu = ( { setMenuVisibilityFn }) => {
   return(
     <View style={ {
     position: 'absolute',
@@ -51,21 +44,25 @@ const SideMenu = () => {
     height: Dimensions.get('window').height - 60,
     backgroundColor: 'rgb(34, 211, 238)'} }>
 
-      <StyledLink to="reminder/movies">
-        <Text>Películas   </Text>
-      </StyledLink>
+      <StyledLink to="/reminder/pending"
+        title="Pending List"
+        onPressFn={setMenuVisibilityFn}
+        />
 
-      <Link to="reminder/movies">
-        <Text>Películas</Text>
-      </Link>
+      <StyledLink to="/reminder/movies"
+        title="Películas"
+        onPressFn={setMenuVisibilityFn}
+        />
 
-      <Link to="reminder/quotes">
-        <Text>Quotes</Text>
-      </Link>
+      <StyledLink to="/reminder/quotes"
+        title="Quotes"
+        onPressFn={setMenuVisibilityFn}
+        />
 
-      <Link to="reminder/songs">
-        <Text>Música</Text>
-      </Link>
+      <StyledLink to="/reminder/songs"
+        title="Música"
+        onPressFn={setMenuVisibilityFn}
+        />
 
     </View>
   );
@@ -79,6 +76,7 @@ export default function App() {
         <View style={ {zIndex: -1} }>
           <Routes>
             <Route path='/' element={<View><Text>Home</Text></View>} />
+            <Route path='reminder/pending' element={<PendingList />} />
             <Route path='reminder/quotes' element={<QuotesReminder />} />
             <Route path='reminder/movies' element={<MoviesReminder />} />
             <Route path='reminder/songs' element={<SongsReminder />} />
