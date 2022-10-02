@@ -47,7 +47,7 @@ const PendingItems = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   cardContainer: {
     width: "100%",

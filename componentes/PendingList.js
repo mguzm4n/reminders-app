@@ -1,4 +1,4 @@
-import { Dimensions, Button, TextInput, Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Button, TextInput, Alert, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import { useState} from 'react';
 import { LinearGradient} from 'expo-linear-gradient';
 import { colors }  from './colors.js';
@@ -7,9 +7,13 @@ import PendingItems from './PendingItems';
 
 const FloatingBtn = ({ onPress }) => {
   return(
-    <Button onPress={onPress} title="+">
-
-    </Button>
+    <View style={styles.pendingBtnContainer}>
+      <TouchableOpacity onPress={onPress} title="+">
+        <View style={styles.addPendingBtn}>
+          <Text style={styles.addPendingBtnTxt}>+</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   ); 
 };
 
@@ -36,18 +40,23 @@ const PendingList = () => {
         <PopUp isVisible={isFormVisible}>
           <View style={ styles.form }>
 
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.form.formField}>
               <Text>Título del recordatorio</Text>
+              <TextInput style={styles.form.formInput} />
+            </View>
+
+            <View style={styles.form.formField}>
+              <Text>Descripción del recordatorio</Text>
+              <TextInput style={styles.form.formInput} />
+            </View>
+
+            <View style={[styles.form.formField, {marginBottom: 10}]}>
+              <Text>Categoría</Text>
               <TextInput />
             </View>
 
-            <Text>Descripción del recordatorio</Text>
-            <TextInput />
-
-            <Text style={{textAlign: 'left'}}>Categoría</Text>
-            <TextInput />
-
             <Button title="Añadir pendiente" />
+            <Button title="Cerrar" onPress={() => setIsFormVisible(false)} />
           </View>
         </PopUp>
         <PendingItems />
@@ -63,11 +72,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   form: {
+    zIndex: 10,
+    width: '90%',
+    position: 'absolute',
+    top: 20,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    width: '90%',
+    backgroundColor: colors.white,
+    formField: {
+      width: '100%', 
+      alignItems: 'flex-start',
+      marginBottom: 30,
+    },
+    formTxt:{
+
+    },
+    formInput: {
+      width: '100%',
+      paddingVertical: 10,
+      borderBottomWidth: 1,
+    },
   },
+  pendingBtnContainer: {
+    zIndex: 10,
+    position: 'absolute',
+    top: Dimensions.get('window').height - 250,
+    right: 40,
+  },
+  addPendingBtn: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.pendingList.unselectedBtn,
+    elevation: 2
+  },
+  addPendingBtnTxt: {
+    fontSize: 35,
+    color: colors.white
+  }
 });
 
 export default PendingList;
