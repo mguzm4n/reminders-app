@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 
 import { colors } from './colors.js';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const CompleteBtn = () => {
   const unselectedBtnColor = colors.pendingList.unselectedBtn;
 
   const [bgColor, setBgColor] = useState(unselectedBtnColor);
-
+ 
   const toggleColor = () => {
     if(bgColor === unselectedBtnColor){
       setBgColor('green');
@@ -31,16 +33,29 @@ const CompleteBtn = () => {
   );
 };
 
+
+const OnTodoDelete = () => {
+  return(
+    <View style={ {justifyContent: 'center'} }>
+      <Text>eliminar</Text>
+    </View>
+  )
+};
+// 
 const TodoItem = ({ todo }) => {
   return(
-    <View style={ styles.container }>
-      <View>
-        <Text style={ styles.title }>{ todo.title }</Text>
-        <Text>{ todo.description }</Text>
-        <Text>{ todo.category }</Text>
-      </View>
-      <CompleteBtn />
-    </View>
+    <GestureHandlerRootView> 
+      <Swipeable renderRightActions={() => <OnTodoDelete />}>
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.title}>{todo.title}</Text>
+            <Text>{todo.description}</Text>
+            <Text>{todo.category}</Text>
+          </View>
+          <CompleteBtn />
+        </View>
+      </Swipeable>
+    </GestureHandlerRootView>
   );
 };
 
@@ -57,11 +72,13 @@ const shadow = {
 
 const styles = StyleSheet.create({
   container: {
+    width: '93%',
     paddingVertical: 10,
     paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    alignSelf: 'center',
     backgroundColor: colors.white,
     borderRadius: 18,
     ...shadow,

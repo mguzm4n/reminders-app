@@ -22,22 +22,28 @@ const todoList = [
   },
 ];
 
-const styles = StyleSheet.create({
-  container: {
-    width: 1,
-  },
-});
-
 const PendingItems = () => {
   return(
-    <View styles={ styles.container }>
+    <View style={styles.container}>
       {todoList.map( (todo, idx) => (
-        <View key={idx} style={ {marginBottom: idx == todoList.length - 1 ? 0 : 10} }>
+        <View 
+          key={idx} 
+          style={ [styles.cardContainer, {marginBottom: idx == todoList.length - 1 ? 0 : 10}] }>
           <TodoItem todo={todo} />
         </View>
       ))}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    alignItems: 'flex-end',
+  },
+  cardContainer: {
+    width: "100%",
+  }
+});
 
 export default PendingItems;

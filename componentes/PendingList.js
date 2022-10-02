@@ -29,7 +29,7 @@ const PendingList = () => {
   return(
     <LinearGradient 
       colors={[gradientPrimary, gradientSecondary]} 
-      style={ { alignItems: 'center' } }>
+      style={ {height: "100%"} }>
 
       <View style={styles.container}>
         <FloatingBtn onPress={() => setIsFormVisible(!isFormVisible)} />
@@ -59,9 +59,8 @@ const PendingList = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '95%',
-    height: '100%',
-    backgroundColor: 'transparent',
+    width: '100%',
+    alignItems: 'center',
   },
   form: {
     justifyContent: 'center',
