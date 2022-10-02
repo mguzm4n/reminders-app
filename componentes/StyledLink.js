@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-native';
 import { StyleSheet, Text, View } from 'react-native';
+import { colors } from './colors';
 
 const styles = StyleSheet.create({
   linkBox: {
@@ -21,7 +22,7 @@ const StyledLink = ({title, to, onPressFn}) => {
   const isActive = pathname === to;
   const titleStyles = isActive ? styles.activeTitleText : styles.titleText;
   return(
-    <Link to={to} style={ styles.linkBox } onPress={onPressFn}>
+    <Link underlayColor={colors.pendingList.gradientSecondary} to={to} style={ styles.linkBox } onPress={onPressFn}>
       <Text style={ titleStyles }>
         { title }
       </Text>

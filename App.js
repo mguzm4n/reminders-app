@@ -1,7 +1,8 @@
-import { useReducer, useState } from 'react';
-import { Dimensions, Button, TextInput, Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { useRef, useState, useEffect } from 'react';
+import { Dimensions, Animated, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
+
 
 import MoviesReminder from "./componentes/MoviesReminder";
 import QuotesReminder from "./componentes/QuotesReminder";
@@ -9,14 +10,41 @@ import SongsReminder from "./componentes/MoviesReminder";
 
 import StyledLink from "./componentes/StyledLink";
 
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import { NativeRouter, Routes, Route } from 'react-router-native';
 
 import PendingList from './componentes/PendingList';
 
 const TopBar = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const width = Math.round(Dimensions.get('window').width);
+  const progressValue = useRef(new Animated.Value(-1*width)).current;
 
-  const setMenuVisibility = () => setIsMenuVisible(!isMenuVisible);
+  const slideIn = () => {
+    Animated.timing(progressValue, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const slideOut = () => {
+    progressValue.setValue(0);
+    Animated.timing(progressValue, {
+      toValue: -1*width,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const toggleMenu = () => {
+    if(!isMenuVisible){
+      setIsMenuVisible(true);
+      slideIn();
+    }else{
+      slideOut();
+      setTimeout(() => setIsMenuVisible(false), 150);
+    }
+  }
 
   return(
     <View>
@@ -25,46 +53,51 @@ const TopBar = () => {
         width: '100%',
         height: 60,
         backgroundColor: 'rgb(34, 211, 238)'} }>
-        <TouchableHighlight onPress={setMenuVisibility}>
+        <TouchableOpacity style={ {width: 60} } onPress={toggleMenu}>
           <Feather name="menu" size={45} color="rgb(34, 121, 100)" style={{marginTop: 7, marginLeft: 7}} />
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
-      {isMenuVisible && <SideMenu setMenuVisibilityFn={setMenuVisibility} />}
+      {isMenuVisible && <SideMenu 
+        toggleMenuFn={toggleMenu}
+        progressAnimationValue={progressValue} />}
     </View>
   );
 };
 
-const SideMenu = ( { setMenuVisibilityFn }) => {
+const SideMenu = ( { toggleMenuFn, progressAnimationValue }) => {
+
   return(
-    <View style={ {
+    <Animated.View style={{
     position: 'absolute',
     top: Constants.statusBarHeight + 60,
     padding: 15,
     width: '50%',
     height: Dimensions.get('window').height - 60,
-    backgroundColor: 'rgb(34, 211, 238)'} }>
+    backgroundColor: 'rgb(34, 211, 238)',
+    transform: [{ translateX: progressAnimationValue }]}
+    }>
 
       <StyledLink to="/reminder/pending"
         title="Pending List"
-        onPressFn={setMenuVisibilityFn}
+        onPressFn={toggleMenuFn}
         />
 
       <StyledLink to="/reminder/movies"
         title="Películas"
-        onPressFn={setMenuVisibilityFn}
+        onPressFn={toggleMenuFn}
         />
 
       <StyledLink to="/reminder/quotes"
         title="Quotes"
-        onPressFn={setMenuVisibilityFn}
+        onPressFn={toggleMenuFn}
         />
 
       <StyledLink to="/reminder/songs"
         title="Música"
-        onPressFn={setMenuVisibilityFn}
+        onPressFn={toggleMenuFn}
         />
 
-    </View>
+    </Animated.View>
   );
 };
 
