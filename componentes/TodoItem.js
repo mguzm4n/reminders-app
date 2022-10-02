@@ -34,18 +34,21 @@ const CompleteBtn = () => {
 };
 
 
-const OnTodoDelete = () => {
+const OnTodoDelete = (progress, dragX) => {
   return(
-    <View style={ {justifyContent: 'center'} }>
-      <Text>eliminar</Text>
+    <View style={ styles.deleteContainer }>
+      <Text style={ styles.deleteTxt }>delete!</Text>
     </View>
   )
 };
 // 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo, deleteItemFn }) => {
   return(
     <GestureHandlerRootView> 
-      <Swipeable renderRightActions={() => <OnTodoDelete />}>
+      <Swipeable 
+        rightThreshold={150}
+        onSwipeableOpen={() => deleteItemFn(todo.id)} 
+        renderRightActions={OnTodoDelete}>
         <View style={styles.container}>
           <View>
             <Text style={styles.title}>{todo.title}</Text>
@@ -94,6 +97,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  deleteContainer: {
+    width: 80,
+    height: '100%',
+    justifyContent: 'center'
+  },
+  deleteTxt: {
+    color: colors.pendingList.redDelete,
   }
 });
 

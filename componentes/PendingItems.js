@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from 'react-native';
 import TodoItem from './TodoItem';
+import { useState } from 'react';
 
 const todoList = [
   {
@@ -23,13 +24,20 @@ const todoList = [
 ];
 
 const PendingItems = () => {
+  const [todoItems, setTodoItems] = useState(todoList);
+
+  const deleteItem = (id) => {
+    const items = todoItems.filter((todo => id !== todo.id));
+    setTodoItems(items);
+  };
+
   return(
     <View style={styles.container}>
-      {todoList.map( (todo, idx) => (
+      {todoItems.map( (todo, idx) => (
         <View 
-          key={idx} 
+          key={todo.id} 
           style={ [styles.cardContainer, {marginBottom: idx == todoList.length - 1 ? 0 : 10}] }>
-          <TodoItem todo={todo} />
+          <TodoItem todo={todo} deleteItemFn={deleteItem} />
         </View>
       ))}
     </View>

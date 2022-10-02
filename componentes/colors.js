@@ -4,5 +4,6 @@ export const colors = {
     gradientPrimary: '#a393fd',
     gradientSecondary: '#89e0fe',
     unselectedBtn: '#e9e5ff',
+    redDelete: '#c70039',
   }
 };
