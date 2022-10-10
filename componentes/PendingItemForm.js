@@ -3,20 +3,35 @@ import { colors }  from './colors.js';
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 
+import { addItemTo } from '../utils.js';
 const PendingItemForm = ({ closeFormFn }) => {
   const [selectedCategory, setSelectedCategory] = useState('movie');
+  const [pendingForm, setPendingForm] = useState({title: '', description: '', category: ''});
+
+  const addPendingItem = () => {
+    const pendingItem = {...pendingForm, category: selectedCategory};
+    addItemTo('pendings', pendingItem);
+  };
+
+  const onInputTextChange = (name, txt) => {
+    setPendingForm({...pendingForm, [name]: txt});
+  };
 
   return(
     <View style={styles.form}>
 
       <View style={styles.field}>
         <Text>Título del recordatorio</Text>
-        <TextInput style={styles.input} />
+        <TextInput 
+          onChangeText={txt => onInputTextChange('title', txt)}
+          style={styles.input} />
       </View>
 
       <View style={styles.field}>
         <Text>Descripción del recordatorio</Text>
-        <TextInput style={styles.input} />
+        <TextInput 
+          onChangeText={txt => onInputTextChange('description', txt)}
+          style={styles.input} />
       </View>
 
       <View style={styles.field}>
@@ -35,7 +50,7 @@ const PendingItemForm = ({ closeFormFn }) => {
       </View>
 
       <View style={ styles.buttons.container }>
-        <Button title="Añadir pendiente" />
+        <Button title="Añadir pendiente" onPress={addPendingItem} />
         <Button color={ colors.pendingList.redDelete } title="Cerrar" onPress={closeFormFn} />
       </View>
     </View>

@@ -24,9 +24,10 @@ const addItemToArray = async (category, categoryArray, item) => {
 
 export const addItemTo = async (category, item) => {
   try {
-    const strCategory = await AsyncStorage.getItem(category);
+    let strCategory = await AsyncStorage.getItem(category);
     if( strCategory == null ){
       await AsyncStorage.setItem(category, JSON.stringify([]));
+      strCategory = await AsyncStorage.getItem(category);
     }
     const categoryArray = JSON.parse(strCategory);
     addItemToArray(category, categoryArray, item);
