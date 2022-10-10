@@ -4,6 +4,7 @@ import { LinearGradient} from 'expo-linear-gradient';
 import { colors }  from './colors.js';
 
 import PendingItems from './PendingItems';
+import PendingItemForm from './PendingItemForm.js';
 
 const FloatingBtn = ({ onPress }) => {
   return(
@@ -30,34 +31,19 @@ const PendingList = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { gradientPrimary, gradientSecondary } = colors.pendingList;
 
+  const closeForm = () => {
+    setIsFormVisible(false);
+  };
+
   return(
     <LinearGradient 
       colors={[gradientPrimary, gradientSecondary]} 
       style={ {height: "100%"} }>
 
       <View style={styles.container}>
-        <FloatingBtn onPress={() => setIsFormVisible(!isFormVisible)} />
+        <FloatingBtn onPress={() => setIsFormVisible(true)} />
         <PopUp isVisible={isFormVisible}>
-          <View style={ styles.form }>
-
-            <View style={styles.form.formField}>
-              <Text>Título del recordatorio</Text>
-              <TextInput style={styles.form.formInput} />
-            </View>
-
-            <View style={styles.form.formField}>
-              <Text>Descripción del recordatorio</Text>
-              <TextInput style={styles.form.formInput} />
-            </View>
-
-            <View style={[styles.form.formField, {marginBottom: 10}]}>
-              <Text>Categoría</Text>
-              <TextInput />
-            </View>
-
-            <Button title="Añadir pendiente" />
-            <Button title="Cerrar" onPress={() => setIsFormVisible(false)} />
-          </View>
+          <PendingItemForm closeFormFn={closeForm} />
         </PopUp>
         <PendingItems />
       </View>
@@ -70,30 +56,6 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     alignItems: 'center',
-  },
-  form: {
-    zIndex: 10,
-    width: '90%',
-    position: 'absolute',
-    top: 20,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: colors.white,
-    formField: {
-      width: '100%', 
-      alignItems: 'flex-start',
-      marginBottom: 30,
-    },
-    formTxt:{
-
-    },
-    formInput: {
-      width: '100%',
-      paddingVertical: 10,
-      borderBottomWidth: 1,
-    },
   },
   pendingBtnContainer: {
     zIndex: 10,
