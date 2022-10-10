@@ -1,6 +1,7 @@
 import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import { Feather } from '@expo/vector-icons';
+
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 
 import { colors } from './colors.js';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -37,7 +38,11 @@ const CompleteBtn = () => {
 const OnTodoDelete = (progress, dragX) => {
   return(
     <View style={ styles.deleteContainer }>
-      <Text style={ styles.deleteTxt }>delete!</Text>
+      <Text style={ styles.deleteTxt }>you're deleting this item!</Text>
+      <MaterialIcons 
+        style={ { position: 'absolute', right: 25 } }
+        name="delete" size={30} 
+        color={ colors.pendingList.redDelete } />
     </View>
   )
 };
@@ -46,8 +51,7 @@ const TodoItem = ({ todo, deleteItemFn }) => {
   return(
     <GestureHandlerRootView> 
       <Swipeable 
-        rightThreshold={150}
-        onSwipeableOpen={() => deleteItemFn(todo.id)} 
+        onSwipeableOpen={() => deleteItemFn(todo.id)}
         renderRightActions={OnTodoDelete}>
         <View style={styles.container}>
           <View>
@@ -99,9 +103,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   deleteContainer: {
-    width: 80,
+    flex: 1,
+    flexDirection: 'row',
     height: '100%',
-    justifyContent: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   deleteTxt: {
     color: colors.pendingList.redDelete,
