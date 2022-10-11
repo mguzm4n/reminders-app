@@ -1,6 +1,7 @@
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList, Dimensions, LayoutAnimation } from 'react-native';
 import TodoItem from './TodoItem';
 import { useState } from 'react';
+import Constants from 'expo-constants';
 
 const todoList = [
   {
@@ -77,6 +78,17 @@ const todoList = [
   },
 ];
 
+const layoutAnimationConfig = {
+  duration: 100,
+  update: {
+    type: LayoutAnimation.Types.easeInEaseOut, 
+  },
+  delete: {
+    type: LayoutAnimation.Types.easeInEaseOut,
+    property: LayoutAnimation.Properties.opacity,
+  },
+};
+
 const PendingItems = () => {
   const [todoItems, setTodoItems] = useState(todoList);
 
@@ -84,7 +96,8 @@ const PendingItems = () => {
     const items = todoItems.filter((todo => id !== todo.id));
     setTimeout(() => {
       setTodoItems(items);
-    }, 200);
+      LayoutAnimation.configureNext(layoutAnimationConfig);
+    }, 100);
   };
 
   return(
@@ -94,6 +107,7 @@ const PendingItems = () => {
         keyExtractor={(todo) => todo.id}
         renderItem={({ item, index }) => <TodoItem todo={item} deleteItemFn={deleteItem} />}
         ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+        ListFooterComponent={() => <View style={{marginVertical: 8}} />}
       />
     </View>
   );
@@ -102,8 +116,7 @@ const PendingItems = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 16,
-    paddingBottom: 15,
-    height: '86%',
+    height: Dimensions.get('window').height - Constants.statusBarHeight - 60 - 16,
   },
 });
 
