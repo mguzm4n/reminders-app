@@ -1,7 +1,9 @@
 import { Text, View, StyleSheet, FlatList, Dimensions, LayoutAnimation } from 'react-native';
 import TodoItem from './TodoItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
+
+import { getDataFrom } from '../utils';
 
 const todoList = [
   {
@@ -89,13 +91,12 @@ const layoutAnimationConfig = {
   },
 };
 
-const PendingItems = () => {
-  const [todoItems, setTodoItems] = useState(todoList);
+const PendingItems = ( {todoItems, setTodoItemsFn} ) => {
 
   const deleteItem = (id) => {
     const items = todoItems.filter((todo => id !== todo.id));
     setTimeout(() => {
-      setTodoItems(items);
+      setTodoItemsFn(items);
       LayoutAnimation.configureNext(layoutAnimationConfig);
     }, 100);
   };
