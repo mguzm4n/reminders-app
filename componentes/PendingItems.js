@@ -1,6 +1,6 @@
-import { Text, View, StyleSheet, FlatList, Dimensions, LayoutAnimation } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions, LayoutAnimation } from 'react-native';
 import TodoItem from './TodoItem';
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import Constants from 'expo-constants';
 
 import { updateItems } from '../utils';
@@ -93,6 +93,8 @@ const layoutAnimationConfig = {
 
 const PendingItems = ( {todoItems, setTodoItemsFn} ) => {
 
+  const listRef = useRef(null);
+
   const deleteItem = (id) => {
     const items = todoItems.filter((todo => id !== todo.id));
     setTimeout(() => {
@@ -105,9 +107,10 @@ const PendingItems = ( {todoItems, setTodoItemsFn} ) => {
   return(
     <View style={styles.container}>
       <FlatList
+        ref={listRef}
         data={todoItems}
         keyExtractor={(todo) => todo.id}
-        renderItem={({ item, index }) => <TodoItem todo={item} deleteItemFn={deleteItem} />}
+        renderItem={({ item, index }) => <TodoItem parentRef={listRef} todo={item} deleteItemFn={deleteItem} />}
         ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
         ListFooterComponent={() => <View style={{marginVertical: 8}} />}
       />

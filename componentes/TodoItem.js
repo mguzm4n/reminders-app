@@ -47,27 +47,31 @@ const OnTodoDelete = (progress, dragX) => {
   )
 };
 // 
-const TodoItem = ({ todo, deleteItemFn }) => {
+const TodoItem = ({ parentRef, todo, deleteItemFn }) => {
   const transitionValue = useRef(new Animated.Value(8)).current;
   const opacityValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const slideIn = () => {
+      const delay = 400;
       Animated
         .timing(transitionValue, {
         toValue: 0,
         duration: 200,
+        delay: delay,
         useNativeDriver: true,
       })
         .start();
       Animated
         .timing(opacityValue, {
         toValue: 1,
-        duration: 100,
+        duration: 200,
+        delay: delay,
         useNativeDriver: true,
       })
         .start();
     };
+    parentRef.current.scrollToEnd();
     slideIn();
   }, []);
 

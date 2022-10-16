@@ -22,6 +22,7 @@ const PendingItemForm = ({ closeFormFn, addNewItemFn }) => {
 
     addNewItemFn(pendingItem);
     addItemTo('pendings', pendingItem);
+    closeFormFn();
   };
 
   const onInputTextChange = (name, txt) => {
