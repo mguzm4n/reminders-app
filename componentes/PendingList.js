@@ -1,10 +1,11 @@
 import { Dimensions, Button, TextInput, Alert, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import { LinearGradient} from 'expo-linear-gradient';
 import { colors }  from './colors.js';
 
 import PendingItems from './PendingItems';
 import PendingItemForm from './PendingItemForm.js';
+import { getDataFrom } from '../utils.js';
 
 const FloatingBtn = ({ onPress }) => {
   return(
@@ -28,11 +29,27 @@ const PopUp = ({ children, isVisible }) => {
 
 
 const PendingList = () => {
+  const [todoItems, setTodoItems] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { gradientPrimary, gradientSecondary } = colors.pendingList;
 
+  useEffect(() => {
+    const getItems = async () => {
+      const items = await getDataFrom('pendings');
+      console.log(items);
+      setTodoItems(items);
+    };
+    getItems();
+  }, []);
+
   const closeForm = () => {
     setIsFormVisible(false);
+  };
+
+  const addNewItem = (todoItems) => {
+    return (newItem) => {
+      setTodoItems([...todoItems, newItem]);
+    };
   };
 
   return(
@@ -43,9 +60,9 @@ const PendingList = () => {
       <View style={styles.container}>
         <FloatingBtn onPress={() => setIsFormVisible(true)} />
         <PopUp isVisible={isFormVisible}>
-          <PendingItemForm closeFormFn={closeForm} />
+          <PendingItemForm closeFormFn={closeForm} addNewItemFn={addNewItem(todoItems)} />
         </PopUp>
-        <PendingItems />
+        <PendingItems todoItems={todoItems} setTodoItemsFn={setTodoItems} />
       </View>
 
     </LinearGradient>
