@@ -1,5 +1,5 @@
-import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { Button, Text, Animated, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useEffect, useState, useRef } from 'react';
 
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 
@@ -48,19 +48,45 @@ const OnTodoDelete = (progress, dragX) => {
 };
 // 
 const TodoItem = ({ todo, deleteItemFn }) => {
+  const transitionValue = useRef(new Animated.Value(8)).current;
+  const opacityValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const slideIn = () => {
+      Animated
+        .timing(transitionValue, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      })
+        .start();
+      Animated
+        .timing(opacityValue, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      })
+        .start();
+    };
+    slideIn();
+  }, []);
+
   return(
-    <GestureHandlerRootView> 
-      <Swipeable 
+    <GestureHandlerRootView>
+      <Swipeable
         onSwipeableOpen={() => deleteItemFn(todo.id)}
         renderRightActions={OnTodoDelete}>
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, {
+            transform:  [ { translateY: transitionValue } ],
+            opacity: opacityValue,
+          } ]}>
           <View>
             <Text style={styles.title}>{todo.title}</Text>
             <Text>{todo.description}</Text>
             <Text>{todo.category}</Text>
           </View>
           <CompleteBtn />
-        </View>
+        </Animated.View>
       </Swipeable>
     </GestureHandlerRootView>
   );
