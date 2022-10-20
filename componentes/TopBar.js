@@ -5,6 +5,8 @@ import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
 import { colors, fontSizes } from './colors';
 
+import PendingsFilter from './PendingsFilter';
+
 const TopBar = ({ navProps }) => {
   const { navigation, options, route } = navProps;
 
@@ -20,6 +22,7 @@ const TopBar = ({ navProps }) => {
         <Feather name="menu" size={45} color={ colors.black } style={ styles.hamburger } />
       </TouchableOpacity>
       <Text style={ styles.title }>{ title }</Text>
+      <PendingsFilter routeName={title} />
     </View>
   );
 };

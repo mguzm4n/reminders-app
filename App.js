@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import { colors } from './componentes/colors';
+import { RouteMaps } from './routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,7 +24,7 @@ export default function App() {
             drawerStyle: { backgroundColor: colors.white, },
           }}>
           <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="Pendings" component={PendingList} />
+          <Drawer.Screen name={RouteMaps.PendingListScreen} component={PendingList} />
           <Drawer.Screen name="Movies" component={MoviesReminder} />
         </Drawer.Navigator>
     </NavigationContainer>
