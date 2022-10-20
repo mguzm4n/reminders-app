@@ -22,7 +22,7 @@ const PendingsFilter = ({ routeName }) => {
           <Ionicons name="filter" size={34} color={ colors.black } />
         </TouchableOpacity>
       </View>
-      {isModalOpen && <FilterOptionSelectorModal />}
+      {isModalOpen && <FilterOptionSelectorModal closeModalFn={() => setIsModalOpen(false)} />}
     </>
   );
 };
