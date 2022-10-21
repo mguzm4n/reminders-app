@@ -1,11 +1,12 @@
-import { Dimensions, Button, TextInput, Alert, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import { useState, useEffect} from 'react';
+import { Dimensions, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { useReducer, useState, useEffect} from 'react';
 import { LinearGradient} from 'expo-linear-gradient';
 import { colors }  from './colors.js';
 
 import PendingItems from './PendingItems';
 import PendingItemForm from './PendingItemForm.js';
 import { getDataFrom } from '../utils.js';
+import { TodoActions, initialState, todoReducer } from '../hooks/todoReducer';
 
 const FloatingBtn = ({ onPress }) => {
   return(
@@ -27,8 +28,8 @@ const PopUp = ({ children, isVisible }) => {
   );
 };
 
-
 const PendingList = () => {
+  const [state, dispatch] = useReducer(todoReducer, initialState);
   const [todoItems, setTodoItems] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { gradientPrimary, gradientSecondary } = colors.pendingList;
@@ -36,20 +37,16 @@ const PendingList = () => {
   useEffect(() => {
     const getItems = async () => {
       const items = await getDataFrom('pendings');
-      console.log(items);
-      setTodoItems(items);
+      dispatch({
+        type: TodoActions.SET,
+        payload: items,
+      });
     };
     getItems();
   }, []);
 
   const closeForm = () => {
     setIsFormVisible(false);
-  };
-
-  const addNewItem = (todoItems) => {
-    return (newItem) => {
-      setTodoItems([...todoItems, newItem]);
-    };
   };
 
   return(
@@ -60,9 +57,9 @@ const PendingList = () => {
       <View style={styles.container}>
         <FloatingBtn onPress={() => setIsFormVisible(true)} />
         <PopUp isVisible={isFormVisible}>
-          <PendingItemForm closeFormFn={closeForm} addNewItemFn={addNewItem(todoItems)} />
+          <PendingItemForm closeFormFn={closeForm} dispatch={dispatch} />
         </PopUp>
-        <PendingItems todoItems={todoItems} setTodoItemsFn={setTodoItems} />
+        <PendingItems todoItems={state.pendingItems} setTodoItemsFn={setTodoItems} />
       </View>
 
     </LinearGradient>

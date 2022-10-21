@@ -1,3 +1,7 @@
+import uuid from 'react-native-uuid';
+import { addItemTo } from '../utils.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export const initialState = {
   pendingItems: [],
 };
@@ -9,15 +13,27 @@ export const TodoActions = {
 
 export const todoReducer = (state, action) => {
   switch(action.type){
+    
     case TodoActions.SET:
       return {
-        pendingItems: action.payload.fetchedItems
+        pendingItems: action.payload
       };
+
     case TodoActions.ADD:
-      return {
-        ...state.pendingItems,
-        action.payload.
+
+      const newPendingItem = {
+        id: uuid.v4(),
+        ...action.payload.formData,
       };
+
+      addItemTo('pendings', newPendingItem);
+      return {
+        pendingItems: [
+          ...state.pendingItems,
+          newPendingItem
+        ]
+      };
+
     default:
       return;
   }

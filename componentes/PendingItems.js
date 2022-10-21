@@ -92,7 +92,7 @@ const layoutAnimationConfig = {
 };
 
 const PendingItems = ( {todoItems, setTodoItemsFn} ) => {
-
+  console.log(todoItems);
   const listRef = useRef(null);
 
   const deleteItem = (id) => {

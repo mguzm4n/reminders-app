@@ -2,26 +2,27 @@ import { Button,  TextInput, StyleSheet, Text, View } from 'react-native';
 import { colors }  from './colors.js';
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
-import uuid from 'react-native-uuid';
 
-import { addItemTo } from '../utils.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-const PendingItemForm = ({ closeFormFn, addNewItemFn }) => {
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+    // AsyncStorage.getAllKeys()
+    //     .then(keys => AsyncStorage.multiRemove(keys))
+    //     .then(() => alert('success'));
+    
+import { TodoActions } from '../hooks/todoReducer';
+
+const PendingItemForm = ({ closeFormFn, dispatch }) => {
   const [selectedCategory, setSelectedCategory] = useState('movie');
   const [pendingForm, setPendingForm] = useState({title: '', description: '', category: ''});
 
   const addPendingItem = () => {
-    // AsyncStorage.getAllKeys()
-    //     .then(keys => AsyncStorage.multiRemove(keys))
-    //     .then(() => alert('success'));
-    const pendingItem = {
-      ...pendingForm, 
-      id: uuid.v4(), 
-      category: selectedCategory
-    };
 
-    addNewItemFn(pendingItem);
-    addItemTo('pendings', pendingItem);
+    dispatch({
+      type: TodoActions.ADD,
+      payload: {
+        formData: { ...pendingForm, category: selectedCategory },
+      }
+    });
+    console.log("dispatched");
     closeFormFn();
   };
 
