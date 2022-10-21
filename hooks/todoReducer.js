@@ -1,5 +1,5 @@
 import uuid from 'react-native-uuid';
-import { addItemTo } from '../utils.js';
+import { addItemTo, updateItems } from '../utils.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const initialState = {
@@ -9,6 +9,7 @@ export const initialState = {
 export const TodoActions = {
   'SET': 'set',
   'ADD': 'add',
+  'DELETE': 'delete',
 };
 
 export const todoReducer = (state, action) => {
@@ -31,6 +32,18 @@ export const todoReducer = (state, action) => {
         pendingItems: [
           ...state.pendingItems,
           newPendingItem
+        ]
+      };
+    
+    case TodoActions.DELETE:
+      const filteredItems = state
+        .pendingItems
+        .filter((todo => action.payload.id !== todo.id));
+      
+      updateItems('pendings', filteredItems);
+      return {
+        pendingItems: [
+          ...filteredItems
         ]
       };
 

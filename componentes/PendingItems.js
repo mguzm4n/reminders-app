@@ -1,9 +1,9 @@
 import { View, StyleSheet, FlatList, Dimensions, LayoutAnimation } from 'react-native';
-import TodoItem from './TodoItem';
+import PendingItem from './PendingItem';
 import { useRef } from 'react';
 import Constants from 'expo-constants';
 
-import { updateItems } from '../utils';
+import { TodoActions } from '../hooks/todoReducer';
 
 // const todoList = [
 //   {
@@ -91,15 +91,15 @@ const layoutAnimationConfig = {
   },
 };
 
-const PendingItems = ( {todoItems, setTodoItemsFn} ) => {
-  console.log(todoItems);
+const PendingItems = ({ pendingItems, dispatch }) => {
   const listRef = useRef(null);
 
   const deleteItem = (id) => {
-    const items = todoItems.filter((todo => id !== todo.id));
     setTimeout(() => {
-      setTodoItemsFn(items);
-      updateItems('pendings', items);
+      dispatch({
+        type: TodoActions.DELETE,
+        payload: { id: id },
+      });
       LayoutAnimation.configureNext(layoutAnimationConfig);
     }, 100);
   };
@@ -108,9 +108,14 @@ const PendingItems = ( {todoItems, setTodoItemsFn} ) => {
     <View style={styles.container}>
       <FlatList
         ref={listRef}
-        data={todoItems}
-        keyExtractor={(todo) => todo.id}
-        renderItem={({ item, index }) => <TodoItem parentRef={listRef} todo={item} deleteItemFn={deleteItem} />}
+        data={pendingItems}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => { 
+          return <PendingItem 
+            parentRef={listRef} 
+            pendingItem={item} 
+            deleteItemFn={deleteItem} />
+        }}
         ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
         ListFooterComponent={() => <View style={{marginVertical: 8}} />}
       />

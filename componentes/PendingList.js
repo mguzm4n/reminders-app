@@ -30,7 +30,6 @@ const PopUp = ({ children, isVisible }) => {
 
 const PendingList = () => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
-  const [todoItems, setTodoItems] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { gradientPrimary, gradientSecondary } = colors.pendingList;
 
@@ -59,7 +58,7 @@ const PendingList = () => {
         <PopUp isVisible={isFormVisible}>
           <PendingItemForm closeFormFn={closeForm} dispatch={dispatch} />
         </PopUp>
-        <PendingItems todoItems={state.pendingItems} setTodoItemsFn={setTodoItems} />
+        <PendingItems pendingItems={state.pendingItems} dispatch={dispatch} />
       </View>
 
     </LinearGradient>

@@ -1,4 +1,4 @@
-import { Button, Text, Animated, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, Animated, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 
 import { Feather, MaterialIcons } from '@expo/vector-icons';
@@ -35,7 +35,7 @@ const CompleteBtn = () => {
 };
 
 
-const OnTodoDelete = (progress, dragX) => {
+const OnPendingItemDelete = (progress, dragX) => {
   return(
     <View style={ styles.deleteContainer }>
       <Text style={ styles.deleteTxt }>you're deleting this item!</Text>
@@ -47,7 +47,7 @@ const OnTodoDelete = (progress, dragX) => {
   )
 };
 // 
-const TodoItem = ({ parentRef, todo, deleteItemFn }) => {
+const PendingItem = ({ parentRef, pendingItem, deleteItemFn }) => {
   const transitionValue = useRef(new Animated.Value(8)).current;
   const opacityValue = useRef(new Animated.Value(0)).current;
 
@@ -78,16 +78,16 @@ const TodoItem = ({ parentRef, todo, deleteItemFn }) => {
   return(
     <GestureHandlerRootView>
       <Swipeable
-        onSwipeableOpen={() => deleteItemFn(todo.id)}
-        renderRightActions={OnTodoDelete}>
+        onSwipeableOpen={() => deleteItemFn(pendingItem.id)}
+        renderRightActions={OnPendingItemDelete}>
         <Animated.View style={[styles.container, {
             transform:  [ { translateY: transitionValue } ],
             opacity: opacityValue,
           } ]}>
           <View>
-            <Text style={styles.title}>{todo.title}</Text>
-            <Text>{todo.description}</Text>
-            <Text>{todo.category}</Text>
+            <Text style={styles.title}>{pendingItem.title}</Text>
+            <Text>{pendingItem.description}</Text>
+            <Text>{pendingItem.category}</Text>
           </View>
           <CompleteBtn />
         </Animated.View>
@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TodoItem;
+export default PendingItem;
