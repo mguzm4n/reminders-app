@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useUpdateAtom } from 'jotai/utils';
 import { filterPendingsAtom } from '../atoms/filters';
 
-const filterOpts = ['All', 'Movies', 'Books', 'Comics'];
+const filterOpts = ['All', 'Movies', 'Books', 'Comics', 'Quotes'];
 
 
 const FilterOptionItem = ({ option, lastItem, closeModalFn }) => {
