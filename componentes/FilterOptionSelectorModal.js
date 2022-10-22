@@ -2,15 +2,22 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 import { colors } from './colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useUpdateAtom } from 'jotai/utils';
+import { filterPendingsAtom } from '../atoms/filters';
+
+const filterOpts = ['All', 'Movies', 'Books', 'Comics'];
 
 
 const FilterOptionItem = ({ option, lastItem, closeModalFn }) => {
-  const onOptionSelect = () => {
+  const setFilterOpt = useUpdateAtom(filterPendingsAtom);
+
+  const onOptionSelect = (option) => {
+    setFilterOpt(option);
     closeModalFn();
   };
 
   return(
-    <TouchableOpacity onPress={onOptionSelect}>
+    <TouchableOpacity onPress={() => onOptionSelect(option)}>
       <View style={ {width: '100%', paddingVertical: 8, paddingLeft: 15,  backgroundColor: colors.paleBlue,
       marginBottom: lastItem ? 0 : 10,
       borderRadius: 8} }>
@@ -20,14 +27,13 @@ const FilterOptionItem = ({ option, lastItem, closeModalFn }) => {
   )
 };
 
-const filterOpts = ['Movies', 'Books', 'Comic'];
 const FilterOptionSelectorModal = ({ closeModalFn }) => {
 
   return(
     <View style={ styles.container }>
       <Text style={{marginBottom: 10, marginLeft: 10}}>Filtrar por...</Text>
       {filterOpts.map( (opt, i) => {
-        return <FilterOptionItem closeModalFn={closeModalFn} lastItem={i == filterOpts.length - 1} option={opt} /> 
+        return <FilterOptionItem key={i} closeModalFn={closeModalFn} lastItem={i == filterOpts.length - 1} option={opt} /> 
       })}
     </View>
   );

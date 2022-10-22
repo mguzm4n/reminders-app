@@ -8,6 +8,10 @@ import PendingItemForm from './PendingItemForm.js';
 import { getDataFrom } from '../utils.js';
 import { TodoActions, initialState, todoReducer } from '../hooks/todoReducer';
 
+import { filterPendingsAtom } from '../atoms/filters';
+import { useAtomValue } from 'jotai/utils';
+
+
 const FloatingBtn = ({ onPress }) => {
   return(
     <View style={styles.pendingBtnContainer}>
@@ -31,6 +35,7 @@ const PopUp = ({ children, isVisible }) => {
 const PendingList = () => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const filterOption = useAtomValue(filterPendingsAtom);
   const { gradientPrimary, gradientSecondary } = colors.pendingList;
 
   useEffect(() => {
@@ -43,6 +48,20 @@ const PendingList = () => {
     };
     getItems();
   }, []);
+
+  const filterItems = () => {
+    if(filterOption === 'All') return state.pendingItems;
+
+    const cleanOption = filterOption
+      .toLowerCase()
+      .substring(0, filterOption.length - 1);
+
+    return state
+      .pendingItems
+      .filter((item) => item.category === cleanOption);
+  };
+
+  const filteredItems = filterItems();
 
   const closeForm = () => {
     setIsFormVisible(false);
@@ -58,7 +77,7 @@ const PendingList = () => {
         <PopUp isVisible={isFormVisible}>
           <PendingItemForm closeFormFn={closeForm} dispatch={dispatch} />
         </PopUp>
-        <PendingItems pendingItems={state.pendingItems} dispatch={dispatch} />
+        <PendingItems pendingItems={filteredItems} dispatch={dispatch} />
       </View>
 
     </LinearGradient>

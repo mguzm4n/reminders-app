@@ -1,6 +1,6 @@
 import { View, StyleSheet, FlatList, Dimensions, LayoutAnimation } from 'react-native';
 import PendingItem from './PendingItem';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Constants from 'expo-constants';
 
 import { TodoActions } from '../hooks/todoReducer';
@@ -92,6 +92,7 @@ const layoutAnimationConfig = {
 };
 
 const PendingItems = ({ pendingItems, dispatch }) => {
+
   const listRef = useRef(null);
 
   const deleteItem = (id) => {

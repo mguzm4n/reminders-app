@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import { Provider } from 'jotai';
 
 import Home from './componentes/Home';
 import TopBar from './componentes/TopBar';
@@ -18,6 +18,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      <Provider>
         <Drawer.Navigator initialRouteName="Home"
           screenOptions={{
             header: ({ navigation, route, options }) => { return <TopBar navProps={ {navigation, route, options} } />},
@@ -27,6 +28,7 @@ export default function App() {
           <Drawer.Screen name={RouteMaps.PendingListScreen} component={PendingList} />
           <Drawer.Screen name="Movies" component={MoviesReminder} />
         </Drawer.Navigator>
+      </Provider>
     </NavigationContainer>
   );
 }

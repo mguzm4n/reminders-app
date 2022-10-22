@@ -15,14 +15,12 @@ const PendingItemForm = ({ closeFormFn, dispatch }) => {
   const [pendingForm, setPendingForm] = useState({title: '', description: '', category: ''});
 
   const addPendingItem = () => {
-
     dispatch({
       type: TodoActions.ADD,
       payload: {
         formData: { ...pendingForm, category: selectedCategory },
       }
     });
-    console.log("dispatched");
     closeFormFn();
   };
 

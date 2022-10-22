@@ -10,6 +10,7 @@ export const TodoActions = {
   'SET': 'set',
   'ADD': 'add',
   'DELETE': 'delete',
+  'FILTER': 'filter',
 };
 
 export const todoReducer = (state, action) => {
@@ -46,6 +47,9 @@ export const todoReducer = (state, action) => {
           ...filteredItems
         ]
       };
+
+    case TodoActions.FILTER:
+      return;
 
     default:
       return;
